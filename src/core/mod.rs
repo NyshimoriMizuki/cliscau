@@ -55,6 +55,7 @@ impl MathIntepreter {
                 parser::Operator::Minus => self.eval(left) - self.eval(right),
                 parser::Operator::Multiply => self.eval(left) * self.eval(right),
                 parser::Operator::Divide => self.eval(left) / self.eval(right),
+                parser::Operator::Power => self.eval(left).powf(self.eval(right)),
             },
             parser::Node::AssignExpr { name, value } => {
                 let value = self.eval(&value);

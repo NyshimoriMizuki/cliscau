@@ -53,12 +53,13 @@ impl Lexer<'_> {
             '-' => Token::Minus,
             '*' => Token::Multiply,
             '/' => Token::Divide,
+            '^' => Token::Power,
             ';' | '\n' => Token::EndLine,
             ' ' | '\r' => Token::Space,
             '(' => Token::LParam,
             ')' => Token::RParam,
             '=' => Token::Assign,
-            any => Token::Unknown(any),
+            any => panic!("LexError: unknown token '{}'", any),
         }
     }
 
@@ -82,13 +83,13 @@ pub enum Token {
     Minus,
     Divide,
     Multiply,
+    Power,
     EndLine,
     LParam,
     RParam,
     Assign,
     Space,
     EOF,
-    Unknown(char),
 }
 impl Token {
     pub fn is(&self, token: Token) -> bool {
@@ -111,11 +112,11 @@ impl Token {
         match self {
             Token::Number(_) => "number",
             Token::Ident(_) => "identifier",
-            Token::Unknown(_) => "unknown",
             Token::Plus => "plus",
             Token::Minus => "minus",
             Token::Divide => "divide",
             Token::Multiply => "multiply",
+            Token::Power => "power",
             Token::EndLine => "endline",
             Token::LParam => "lparam",
             Token::RParam => "rparam",
@@ -129,11 +130,11 @@ impl Token {
         match self {
             Token::Number(v) => format!("<Number:{}>", v),
             Token::Ident(v) => format!("<Identifier:{}>", v),
-            Token::Unknown(v) => format!("<Unknown:{}>", v),
             Token::Plus => format!("<Plus>"),
             Token::Minus => format!("<Minus>"),
             Token::Divide => format!("<Divide>"),
             Token::Multiply => format!("<Multiply>"),
+            Token::Power => format!("<Power>"),
             Token::EndLine => format!("<EndLine>"),
             Token::LParam => format!("<LParam>"),
             Token::RParam => format!("<RParam>"),

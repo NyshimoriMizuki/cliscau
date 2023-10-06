@@ -42,6 +42,7 @@ pub enum Operator {
     Minus,
     Multiply,
     Divide,
+    Power,
 }
 impl Operator {
     fn from(token: Token) -> Operator {
@@ -50,6 +51,7 @@ impl Operator {
             Token::Minus => Operator::Minus,
             Token::Divide => Operator::Divide,
             Token::Multiply => Operator::Multiply,
+            Token::Power => Operator::Power,
             any => panic!("ParseError: {} is not a operator!", any),
         }
     }
@@ -129,12 +131,27 @@ impl Parser {
     }
 
     fn get_mult_expr(&mut self) -> Node {
-        let mut left = self.get_term();
+        let mut left = self.get_exponential_expr();
         while self
             .tokens
             .get_at(0)
             .is_in(&vec![Token::Multiply, Token::Divide])
         {
+            left = Node::make_binary_expr(
+                match self.tokens.next() {
+                    Some(t) => Operator::from(t),
+                    None => panic!("SyntaxError: unexpected end of input."),
+                },
+                left.clone(),
+                self.get_exponential_expr(),
+            );
+        }
+        left
+    }
+
+    fn get_exponential_expr(&mut self) -> Node {
+        let mut left = self.get_term();
+        while self.tokens.get_at(0) == Token::Power {
             left = Node::make_binary_expr(
                 match self.tokens.next() {
                     Some(t) => Operator::from(t),
