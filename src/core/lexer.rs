@@ -31,7 +31,7 @@ impl Lexer<'_> {
             };
             let kind = self.get_kind(char_);
 
-            if kind.is(Token::Space) || kind.is(Token::EndLine) {
+            if kind.is(Token::Space) {
                 continue;
             }
             tokens.push(kind);
@@ -127,8 +127,8 @@ impl Token {
 
     pub fn to_string(&self) -> String {
         match self {
-            Token::Number(v) => format!("<Num:{}>", v),
-            Token::Ident(v) => format!("<Ident:{}>", v),
+            Token::Number(v) => format!("<Number:{}>", v),
+            Token::Ident(v) => format!("<Identifier:{}>", v),
             Token::Unknown(v) => format!("<Unknown:{}>", v),
             Token::Plus => format!("<Plus>"),
             Token::Minus => format!("<Minus>"),

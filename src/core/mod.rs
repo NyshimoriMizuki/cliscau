@@ -20,6 +20,7 @@ impl MathIntepreter {
             p.parse();
             p.get_ast()
         };
+
         for node in ast.nodes() {
             println!("{:?}", self.eval(&node));
         }
@@ -31,7 +32,10 @@ impl MathIntepreter {
     fn get_variable(&self, name: &str) -> f64 {
         match self.variables.get(name) {
             Some(v) => v.to_owned(),
-            None => 0.0,
+            None => {
+                println!("ReferenceError: variable \"{}\" not found! \n\tThe value \"0.0\" was given to not break.\n", name);
+                0.0
+            }
         }
     }
 

@@ -91,6 +91,17 @@ impl Parser {
         while self.tokens.get_at(0).is_not(Token::EOF) {
             let new_node = self.get_node();
             self.nodes.push(new_node);
+
+            if self.tokens.get_at(0).is_not(Token::EndLine)
+                && self.tokens.get_at(0).is_not(Token::EOF)
+            {
+                panic!(
+                    "SyntaxError: expected \";\" or \"end of input\", not {}",
+                    self.tokens.get_at(0)
+                );
+            } else {
+                self.tokens.next();
+            }
         }
     }
     fn get_node(&mut self) -> Node {
